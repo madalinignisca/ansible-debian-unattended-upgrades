@@ -1,0 +1,10 @@
+---
+- name: Configure Debian Unattended Upgrades
+  hosts: all
+  become: yes
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - role: unattended_upgrades

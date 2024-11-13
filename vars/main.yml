@@ -1,0 +1,17 @@
+---
+# vars/main.yml
+
+# Define the time for automatic reboot (24-hour format)
+automatic_reboot_time: "02:00"
+
+# Define the cron schedule for the reboot script
+reboot_cron_time: "0 3 * * *"
+
+# Path to the reboot script
+reboot_script_path: "/usr/local/bin/unattended-upgrades-reboot.sh"
+
+# Path to store the last reboot timestamp
+reboot_timestamp_file: "/var/log/last_unattended_reboot"
+
+# Reboot interval in seconds (2 weeks)
+reboot_interval_seconds: 1209600

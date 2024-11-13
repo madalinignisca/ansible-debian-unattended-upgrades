@@ -1,0 +1,58 @@
+---
+# roles/unattended_upgrades/tasks/main.yml
+
+- name: Install required packages
+  apt:
+    name:
+      - unattended-upgrades
+      - update-notifier-common
+    state: present
+    update_cache: yes
+
+- name: Configure 50unattended-upgrades
+  template:
+    src: 50unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart unattended-upgrades service
+
+- name: Configure 10periodic
+  template:
+    src: 10periodic.j2
+    dest: /etc/apt/apt.conf.d/10periodic
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart unattended-upgrades service
+
+- name: Ensure unattended-upgrades is enabled
+  systemd:
+    name: unattended-upgrades
+    enabled: yes
+    state: started
+
+- name: Deploy reboot management script
+  copy:
+    src: ../files/unattended-upgrades-reboot.sh
+    dest: "{{ reboot_script_path }}"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Ensure reboot timestamp file exists
+  file:
+    path: "{{ reboot_timestamp_file }}"
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create cron job for reboot management script
+  cron:
+    name: "Unattended Upgrades Reboot Management"
+    special_time: first
+    user: root
+    job: "{{ reboot_cron_time }} {{ reboot_script_path }}"
+

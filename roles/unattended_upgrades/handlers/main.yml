@@ -1,0 +1,7 @@
+---
+# roles/unattended_upgrades/handlers/main.yml
+
+- name: Restart unattended-upgrades service
+  systemd:
+    name: unattended-upgrades
+    state: restarted

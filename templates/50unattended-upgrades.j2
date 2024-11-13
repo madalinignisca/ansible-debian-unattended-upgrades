@@ -1,0 +1,29 @@
+// 50unattended-upgrades
+
+Unattended-Upgrade::Allowed-Origins {
+    "{{ ansible_lsb.id | default('Debian') }}:{{ ansible_lsb.codename }}";
+    "{{ ansible_lsb.id | default('Debian') }}:{{ ansible_lsb.codename }}-updates";
+    "{{ ansible_lsb.id | default('Debian') }}:{{ ansible_lsb.codename }}-proposed";
+    "{{ ansible_lsb.id | default('Debian') }}:{{ ansible_lsb.codename }}-backports";
+    "{{ ansible_lsb.id | default('Debian') }}:{{ ansible_lsb.codename }}-security";
+};
+
+Unattended-Upgrade::Automatic-Reboot "true";
+Unattended-Upgrade::Automatic-Reboot-Time "{{ automatic_reboot_time }}";
+
+Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
+
+Unattended-Upgrade::Mail "";
+Unattended-Upgrade::MailOnlyOnError "false";
+
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::InstallOnShutdown "false";
+
+Unattended-Upgrade::Automatic-Reboot-Successful "true";
+
+Unattended-Upgrade::DPkg::Options {
+   "--force-confdef";
+   "--force-confold";
+};
+
+Unattended-Upgrade::Enable-Restore-Terminal "false";
